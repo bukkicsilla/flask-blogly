@@ -110,3 +110,12 @@ def create_post(user_id):
 def show_post(post_id):
     post = Post.query.get(post_id)
     return render_template('post.html', post=post)
+
+@app.route("/posts/<int:post_id>/delete")
+def delete_post(post_id):
+    '''Deletes a singe post'''
+    post = Post.query.get(post_id)
+    user_id = post.user_id
+    Post.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return redirect(f"/users/{user_id}")
