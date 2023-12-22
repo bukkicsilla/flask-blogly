@@ -28,7 +28,7 @@ def users_list():
     return render_template('users.html', users=users)
 
 @app.route("/users/new")
-def show_create_form():
+def show_create_form_user():
     return render_template('new_user.html')
 
 @app.route("/users/new", methods=['POST'])
@@ -51,11 +51,9 @@ def create_user():
 def show_user(user_id):
     '''Shows details about a single user'''
     user = User.query.get(user_id)
-    #fullname = user.get_full_name()
-    fullname = user.fullname
     greeting = user.greet()
-    posts = Post.query.all()
-    return render_template('user.html', user=user, greeting=greeting, fullname=fullname, posts=posts)
+    posts = User.query.get(user_id).posts
+    return render_template('user.html', user=user, greeting=greeting, posts=posts)
 
 @app.route("/users/<int:user_id>/delete")
 def delete_user(user_id):
@@ -90,3 +88,25 @@ def edit_user(user_id):
     db.session.add(user)
     db.session.commit()
     return redirect(f"/users/{user_id}")
+
+@app.route("/users/<int:user_id>/posts/new")
+def show_create_form_post(user_id):
+    user = User.query.get(user_id)
+    return render_template('new_post.html', user=user)
+
+@app.route("/users/<int:user_id>/posts/new", methods=['POST'])
+def create_post(user_id):
+    title = request.form["title"]
+    content = request.form["content"]
+    if not title:
+        flash("Title cannot be empty!", "invalid")
+        return redirect(f"/users/{user_id}")
+    new_post = Post(title=title, content=content, user_id=user_id)
+    db.session.add(new_post)
+    db.session.commit()
+    return redirect(f"/users/{user_id}")
+
+@app.route("/posts/<int:post_id>")
+def show_post(post_id):
+    post = Post.query.get(post_id)
+    return render_template('post.html', post=post)

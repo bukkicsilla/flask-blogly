@@ -1,12 +1,12 @@
-{% extends 'base.html' %} {% block title %} {{fullname}} {% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %} {{user.fullname}} {% endblock %} {%
+block content %}
 
 <section>
   <h3>{{greeting}}</h3>
   <div>
     <img src="{{user.image_url}}" alt="{{user.first_name}}" />
   </div>
-  <h3>{{user.first_name}} {{user.last_name}}</h3>
+  <h3>{{user.fullname}}</h3>
   <form class="form_modif" action="/users" method="POST">
     <a class="btn btn-success" href="/users/{{user.id}}/edit">Edit</a>
   </form>
@@ -22,8 +22,11 @@ content %}
   <h2>Posts</h2>
   <ol class="posts_list">
     {% for post in posts %}
-    <li>{{post.title}}</li>
+    <li>
+      <a href="/posts/{{post.id}}">{{post.title}}</a>
+    </li>
     {% endfor %}
   </ol>
+  <a href="/users/{{user.id}}/posts/new" class="btn btn-success">Add post</a>
 </div>
 {% endblock %}
