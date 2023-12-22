@@ -119,3 +119,25 @@ def delete_post(post_id):
     Post.query.filter_by(id=post_id).delete()
     db.session.commit()
     return redirect(f"/users/{user_id}")
+
+@app.route("/posts/<int:post_id>/edit")
+def show_edit_form_post(post_id):
+    post = Post.query.get(post_id)
+    return render_template("edit_post.html", post=post)
+
+@app.route("/posts/<int:post_id>/edit" , methods=['POST'])
+def edit_post(post_id):
+    title = request.form["title"]
+    content = request.form["content"]
+    if not title:
+        flash("Title cannot be empty!", "invalid")
+        return redirect(f"/posts/{post_id}")
+    post = Post.query.get(post_id)
+    post.title = title
+    post.content = content
+    post.user_id = post.user.id
+    db.session.add(post)
+    db.session.commit()
+    return redirect(f"/posts/{post_id}")
+
+

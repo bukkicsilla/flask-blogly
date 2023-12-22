@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block title %} Edit user {% endblock %} {% block
+content %}
+<div class="container">
+  <h1 class="my-5">Edit a user</h1>
+
+  <form class="newedit" action="/posts/{{post.id}}/edit" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        class="form-control"
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Enter a title"
+        value="{{post.title}}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <input
+        class="form-control"
+        type="text"
+        id="content"
+        name="content"
+        placeholder="Enter a content"
+        value="{{post.content}}"
+      />
+    </div>
+    <div class="buttons mt-4">
+      <a class="btn btn-light" href="/posts/{{post.id}}">Cancel</a>
+      <button class="btn btn-success">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
