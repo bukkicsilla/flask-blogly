@@ -9,12 +9,15 @@ app.config['SECRET_KEY'] = "Be kind whenever possible. It is always possible."
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 10
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gajqogre:pEjPuL1vijdSrzMg69aihCrVU79n-8G7@berry.db.elephantsql.com/gajqogre'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
+#with app.app_context():
+#  db.create_all()
 
 @app.route("/")
 def home():
