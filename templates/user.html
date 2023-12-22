@@ -7,10 +7,10 @@ block content %}
     <img src="{{user.image_url}}" alt="{{user.first_name}}" />
   </div>
   <h3>{{user.fullname}}</h3>
-  <form class="form_modif" action="/users" method="POST">
+  <form class="form_modif" method="POST">
     <a class="btn btn-success" href="/users/{{user.id}}/edit">Edit</a>
   </form>
-  <form class="form_modif" action="/users" method="POST">
+  <form class="form_modif" method="POST">
     <a class="btn btn-danger" href="/users/{{user.id}}/delete">Delete</a>
   </form>
 

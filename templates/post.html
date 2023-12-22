@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{post.title}}</title>
-  </head>
-  <body>
-    <h1>{{post.title}}</h1>
-    <p>{{post.content}}</p>
-    <p>By {{post.user.fullname}}</p>
-    <small> {{post.created_at}}</small>
-  </body>
-</html>
+{% extends 'base.html' %} {% block title %} {{post.title}} {% endblock %} {%
+block content %}
+<h1>{{post.title}}</h1>
+<p>{{post.content}}</p>
+<p>By {{post.user.fullname}}</p>
+<small> {{post.created_at}}</small>
+<div>
+  <a class="btn btn-light" href="/users/{{post.user.id}}">Cancel</a>
+  <form class="form_modif" method="POST">
+    <a class="btn btn-success" href="/posts/{{post.id}}/edit">Edit</a>
+  </form>
+  <form class="form_modif" method="POST">
+    <a class="btn btn-danger" href="/posts/{{post.id}}/delete">Delete</a>
+  </form>
+</div>
+{% endblock %}
