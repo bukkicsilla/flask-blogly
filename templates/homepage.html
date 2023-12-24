@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block title %} Blogly {% endblock %} {% block
+content %}
+
+<div class="container">
+  <h1 class="mt-5">Blogly Recent Posts</h1>
+  {% for post in posts %}
+  <h5 class="mt-4">
+    <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+  </h5>
+  <p>{{ post.content }}</p>
+  <small>By {{ post.user.fullname }} on {{ post.nicedate }}</small>
+  {% endfor %}
+  <a href="/users" class="btn btn-info mt-4">See Users</a>
+</div>
+{% endblock %}}

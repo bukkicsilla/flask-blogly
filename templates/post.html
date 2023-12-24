@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %} {{post.title}} {% endblock %} {%
 block content %}
-<section>
-  <h1 class="mb-3">{{post.title}}</h1>
+<section class="container text-center">
+  <h1 class="mb-3 mt-5">{{post.title}}</h1>
   <p>{{post.content}}</p>
   <p>By {{post.user.fullname}}</p>
   <small> {{post.created_at}}</small>

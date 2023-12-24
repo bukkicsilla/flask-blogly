@@ -42,6 +42,8 @@ class User(db.Model):
     def fullname(self):
         del self._fullname
 
+    
+
 class Post(db.Model):
     __tablename__ = "posts"
 
@@ -57,6 +59,11 @@ class Post(db.Model):
     #user = db.relationship("User", back_populates="posts")
     user = db.relationship('User', backref='posts')
     #user = db.relationship('User', backref=db.backref('posts', passive_deletes=True))
+
+    @property
+    def nicedate(self):
+        return self.created_at.strftime("%a %b %-d  %Y, %-I:%M %p")
+    
 
 #https://stackoverflow.com/questions/5033547/sqlalchemy-cascade-delete
 #https://stackoverflow.com/questions/26475977/flask-sqlalchemy-adjacency-list-backref-error
