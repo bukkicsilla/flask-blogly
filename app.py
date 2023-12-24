@@ -1,8 +1,10 @@
 """Blogly application."""
 
+
 from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "Be kind whenever possible. It is always possible."
@@ -12,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gajqogre:pEjPuL1vijdSrzMg69aihCrVU79n-8G7@berry.db.elephantsql.com/gajqogre'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+
 
 debug = DebugToolbarExtension(app)
 connect_db(app)
@@ -24,15 +27,18 @@ def home():
     '''Redirected to /users'''
     return redirect("/users")
 
+
 @app.route("/users")
 def users_list():
     '''Shows all the users'''
     users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template('users.html', users=users)
 
+
 @app.route("/users/new")
 def show_create_form_user():
     return render_template('new_user.html')
+
 
 @app.route("/users/new", methods=['POST'])
 def create_user():
@@ -45,10 +51,13 @@ def create_user():
     if not last_name:
         flash("Lastname cannot be empty!", "invalid")
         return redirect("/users")
+    if not image_url:
+        image_url = "https://images.unsplash.com/photo-1510936111840-65e151ad71bb?q=80&w=2980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
     db.session.add(new_user)
     db.session.commit()
     return redirect("/users")
+
 
 @app.route("/users/<int:user_id>/")
 def show_user(user_id):
@@ -58,12 +67,14 @@ def show_user(user_id):
     posts = User.query.get(user_id).posts
     return render_template('user.html', user=user, greeting=greeting, posts=posts)
 
+
 @app.route("/users/<int:user_id>/delete")
 def delete_user(user_id):
     '''Deletes a singe user'''
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
     return redirect('/users')
+
 
 @app.route("/users/<int:user_id>/edit")
 def show_edit_form(user_id):
@@ -72,6 +83,7 @@ def show_edit_form(user_id):
     if not user.image_url:
         user.image_url = ""
     return render_template('edit_user.html', user=user)
+
 
 @app.route("/users/<int:user_id>/edit", methods=['POST'])
 def edit_user(user_id):
@@ -92,10 +104,12 @@ def edit_user(user_id):
     db.session.commit()
     return redirect(f"/users/{user_id}")
 
+
 @app.route("/users/<int:user_id>/posts/new")
 def show_create_form_post(user_id):
     user = User.query.get(user_id)
     return render_template('new_post.html', user=user)
+
 
 @app.route("/users/<int:user_id>/posts/new", methods=['POST'])
 def create_post(user_id):
@@ -109,10 +123,12 @@ def create_post(user_id):
     db.session.commit()
     return redirect(f"/users/{user_id}")
 
+
 @app.route("/posts/<int:post_id>")
 def show_post(post_id):
     post = Post.query.get(post_id)
     return render_template('post.html', post=post)
+
 
 @app.route("/posts/<int:post_id>/delete")
 def delete_post(post_id):
@@ -123,10 +139,12 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(f"/users/{user_id}")
 
+
 @app.route("/posts/<int:post_id>/edit")
 def show_edit_form_post(post_id):
     post = Post.query.get(post_id)
     return render_template("edit_post.html", post=post)
+
 
 @app.route("/posts/<int:post_id>/edit" , methods=['POST'])
 def edit_post(post_id):
@@ -144,3 +162,7 @@ def edit_post(post_id):
     return redirect(f"/posts/{post_id}")
 
 
+'''@app.errorhandler(404)
+def page_not_found(e):
+    """Show 404 NOT FOUND page."""
+    return render_template('404.html'), 404'''

@@ -1,32 +1,37 @@
 {% extends 'base.html' %} {% block title %} {{user.fullname}} {% endblock %} {%
 block content %}
-
 <section>
-  <h3>{{greeting}}</h3>
-  <div>
-    <img src="{{user.image_url}}" alt="{{user.first_name}}" />
-  </div>
-  <h3>{{user.fullname}}</h3>
-  <form class="form_modif" method="POST">
-    <a class="btn btn-success" href="/users/{{user.id}}/edit">Edit</a>
-  </form>
-  <form class="form_modif" method="POST">
-    <a class="btn btn-danger" href="/users/{{user.id}}/delete">Delete</a>
-  </form>
+  <!--<h3>{{greeting}}</h3>-->
+  <div class="row">
+    <div class="col">
+      <img src="{{user.image_url}}" alt="{{user.first_name}}" />
+    </div>
+    <div class="col">
+      <h3>{{user.fullname}}</h3>
+      <form class="form_modif" method="POST">
+        <a class="btn btn-success" href="/users/{{user.id}}/edit">Edit</a>
+      </form>
+      <form class="form_modif" method="POST">
+        <a class="btn btn-danger" href="/users/{{user.id}}/delete">Delete</a>
+      </form>
 
-  <div class="mt-5">
-    <a class="btn btn-light" href="/">Go to Users</a>
+      <div class="mt-5">
+        <a class="btn btn-light" href="/">Go to Users</a>
+      </div>
+      <div class="posts">
+        <h2>Posts</h2>
+        <ol class="posts_list">
+          {% for post in posts %}
+          <li>
+            <a href="/posts/{{post.id}}">{{post.title}}</a>
+          </li>
+          {% endfor %}
+        </ol>
+        <a href="/users/{{user.id}}/posts/new" class="btn btn-success"
+          >Add post</a
+        >
+      </div>
+    </div>
   </div>
 </section>
-<div class="posts">
-  <h2>Posts</h2>
-  <ol class="posts_list">
-    {% for post in posts %}
-    <li>
-      <a href="/posts/{{post.id}}">{{post.title}}</a>
-    </li>
-    {% endfor %}
-  </ol>
-  <a href="/users/{{user.id}}/posts/new" class="btn btn-success">Add post</a>
-</div>
 {% endblock %}
