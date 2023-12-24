@@ -62,10 +62,13 @@ def create_user():
 @app.route("/users/<int:user_id>/")
 def show_user(user_id):
     '''Shows details about a single user'''
+    
     user = User.query.get(user_id)
-    greeting = user.greet()
-    posts = User.query.get(user_id).posts
-    return render_template('user.html', user=user, greeting=greeting, posts=posts)
+    if user:
+        posts = User.query.get(user_id).posts
+        return render_template('user.html', user=user, posts=posts)
+    else:
+        return render_template('four_o_four.html'), 404
 
 
 @app.route("/users/<int:user_id>/delete")
@@ -127,7 +130,10 @@ def create_post(user_id):
 @app.route("/posts/<int:post_id>")
 def show_post(post_id):
     post = Post.query.get(post_id)
-    return render_template('post.html', post=post)
+    if post:
+        return render_template('post.html', post=post)
+    else:
+        return render_template('four_o_four.html'), 404
 
 
 @app.route("/posts/<int:post_id>/delete")
@@ -162,7 +168,7 @@ def edit_post(post_id):
     return redirect(f"/posts/{post_id}")
 
 
-'''@app.errorhandler(404)
+@app.errorhandler(404)
 def page_not_found(e):
     """Show 404 NOT FOUND page."""
-    return render_template('404.html'), 404'''
+    return render_template('four_o_four.html'), 404
