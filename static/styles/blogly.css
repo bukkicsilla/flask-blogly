@@ -22,11 +22,11 @@ h3 {
 }
 a {
   color: #669bbc;
+  text-decoration: none;
 }
 span {
   float: right;
 }
-
 .form_modif {
   display: inline-block;
 }
@@ -59,4 +59,8 @@ h1 {
 }
 .posts {
   margin-top: 2rem;
+}
+.tag_list,
+.post_list {
+  list-style: none;
 }
