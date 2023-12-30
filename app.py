@@ -120,7 +120,8 @@ def edit_user(user_id):
 @app.route("/users/<int:user_id>/posts/new")
 def show_create_form_post(user_id):
     user = User.query.get(user_id)
-    return render_template('new_post.html', user=user)
+    tags = Tag.query.all()
+    return render_template('new_post.html', user=user, tags=tags)
 
 
 @app.route("/users/<int:user_id>/posts/new", methods=['POST'])
@@ -130,7 +131,9 @@ def create_post(user_id):
     if not title:
         flash("Title cannot be empty!", "invalid")
         return redirect(f"/users/{user_id}")
-    new_post = Post(title=title, content=content, user_id=user_id)
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
+    new_post = Post(title=title, content=content, user_id=user_id, tags=tags)
     db.session.add(new_post)
     db.session.commit()
     return redirect(f"/users/{user_id}")
@@ -149,6 +152,11 @@ def show_post(post_id):
 def delete_post(post_id):
     '''Deletes a singe post'''
     post = Post.query.get(post_id)
+    tags = post.tags
+    print()
+    print("TAGS", tags)
+    print()
+    post.tags = []
     user_id = post.user_id
     Post.query.filter_by(id=post_id).delete()
     db.session.commit()

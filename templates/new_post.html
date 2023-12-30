@@ -19,6 +19,22 @@ content %}
       name="content"
       placeholder="Enter a content"
     />
+    <div class="form-check form-group row">
+      {% for tag in tags %}
+      <div>
+        <input
+          class="form-input"
+          type="checkbox"
+          value="{{ tag.id }}"
+          id="tag_{{ tag.id }}"
+          name="tags"
+        />
+        <label class="form-check-label" for="tag_{{ tag.id }}">
+          {{ tag.name }}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
     <div class="buttons mt-4">
       <a class="btn btn-light" href="/users/{{user.id}}">Cancel</a>
       <button class="btn btn-success">Add</button>
