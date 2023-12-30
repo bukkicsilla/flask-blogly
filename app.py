@@ -78,6 +78,10 @@ def show_user(user_id):
 @app.route("/users/<int:user_id>/delete")
 def delete_user(user_id):
     '''Deletes a singe user'''
+    posts = User.query.get(user_id).posts
+    for post in posts:
+        Post.query.filter_by(id=post.id).delete()
+        db.session.commit()
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
     return redirect('/users')

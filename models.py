@@ -16,9 +16,8 @@ class User(db.Model):
     first_name = db.Column(db.String(30), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
     image_url = db.Column(db.Text, nullable=True, default=None)
-    #posts = db.relationship('Post', backref='user', cascade="all, delete, delete-orphan")
-    #posts = db.relationship("Post", back_populates="user", cascade="all, delete", passive_deletes=True)
-    #posts = db.relationship('Post', back_populates="user", cascade='all, delete, delete-orphan')
+    #posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
+    #posts = db.relationship("Post", backref="user", cascade="all, delete")
 
     
     def get_full_name(self):
@@ -41,7 +40,6 @@ class User(db.Model):
     @fullname.deleter
     def fullname(self):
         del self._fullname
-
     
 
 class Post(db.Model):
@@ -54,11 +52,11 @@ class Post(db.Model):
     title = db.Column(db.String(30), nullable=False)
     content = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    #user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    #user = db.relationship("User", back_populates="posts")
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', backref='posts')
-    #user = db.relationship('User', backref=db.backref('posts', passive_deletes=True))
+    #user = db.relationship(
+    #    "User", backref=db.backref("posts", cascade="all, delete-orphan")
+    #)
 
     @property
     def nicedate(self):
