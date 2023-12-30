@@ -11,7 +11,10 @@ def connect_db(app):
 """Models for Blogly.""" 
     
 class User(db.Model):
+    """Create a user"""
+
     __tablename__ = "users"
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(30), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
@@ -43,6 +46,8 @@ class User(db.Model):
     
 
 class Post(db.Model):
+    """Post by a user"""
+
     __tablename__ = "posts"
 
     def __repr__(self):
@@ -62,6 +67,29 @@ class Post(db.Model):
     def nicedate(self):
         return self.created_at.strftime("%a %b %-d  %Y, %-I:%M %p")
     
+class PostTag(db.Model):
+    """Tag on a post."""
+
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
+
+class Tag(db.Model):
+    """Tag that can be added to a post."""
+
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    posts = db.relationship(
+        'Post',
+        secondary="posts_tags",
+        cascade="all,delete",
+        backref="tags",
+    )
 
 #https://stackoverflow.com/questions/5033547/sqlalchemy-cascade-delete
 #https://stackoverflow.com/questions/26475977/flask-sqlalchemy-adjacency-list-backref-error

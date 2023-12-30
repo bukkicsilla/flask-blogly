@@ -1,4 +1,4 @@
-from models import db, User, Post
+from models import db, User, Post, Tag, PostTag
 from app import app
 
 db.drop_all()
@@ -21,4 +21,29 @@ p4 = Post(title='loyal', content="I love my owner, and I like to be in the room.
 p5 = Post(title="tiger", content="I have stripes. I look like a tiger.", user_id=2)
 p6 = Post(title='sweet', content="I have a long black and white hair, you can pet me.", user_id=3)
 db.session.add_all([p1, p2, p3, p4, p5, p6])
+db.session.commit()
+
+t1 = Tag(name="Fun")
+t2 = Tag(name="Cat")
+t3 = Tag(name="Sick")
+t4 = Tag(name="Happy")
+t5 = Tag(name="Outside")
+t6 = Tag(name="Inside")
+db.session.add_all([t1,t2,t3,t4,t5,t6])
+db.session.commit()
+
+pt13 = PostTag(post_id=1,tag_id=3)
+pt12 = PostTag(post_id=1,tag_id=2)
+pt21 = PostTag(post_id=2,tag_id=1)
+pt22 = PostTag(post_id=2,tag_id=2)
+pt24 = PostTag(post_id=2,tag_id=4)
+pt32 = PostTag(post_id=3,tag_id=2)
+pt35 = PostTag(post_id=3,tag_id=5)
+pt42 = PostTag(post_id=4,tag_id=2)
+pt44 = PostTag(post_id=4,tag_id=4)
+pt46 = PostTag(post_id=4,tag_id=6)
+pt52 = PostTag(post_id=5,tag_id=2)
+pt62 = PostTag(post_id=6,tag_id=2)
+pt64 = PostTag(post_id=6,tag_id=4)
+db.session.add_all([pt13, pt12, pt21, pt22, pt24, pt32, pt35, pt42, pt44, pt46, pt52, pt62, pt64])
 db.session.commit()

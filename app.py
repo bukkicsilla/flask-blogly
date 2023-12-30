@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 
 app = Flask(__name__)
@@ -175,6 +175,18 @@ def edit_post(post_id):
     db.session.commit()
     return redirect(f"/posts/{post_id}")
 
+@app.route("/tags")
+def show_tags():
+    """Show all tags"""
+    tags = Tag.query.all()
+    return render_template('tags.html', tags=tags)
+
+@app.route('/tags/<int:tag_id>')
+def tag_show(tag_id):
+    """Show a specific tag"""
+
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template('tag.html', tag=tag)
 
 @app.errorhandler(404)
 def page_not_found(e):
