@@ -22,6 +22,7 @@ db.create_all()
 #with app.app_context():
 #  db.create_all()
 
+
 @app.route("/")
 def home():
     #'''Redirected to /users'''
@@ -175,11 +176,13 @@ def edit_post(post_id):
     db.session.commit()
     return redirect(f"/posts/{post_id}")
 
+
 @app.route("/tags")
 def show_tags():
     """Show all tags"""
     tags = Tag.query.all()
     return render_template('tags.html', tags=tags)
+
 
 @app.route('/tags/<int:tag_id>')
 def tag_show(tag_id):
@@ -187,6 +190,42 @@ def tag_show(tag_id):
 
     tag = Tag.query.get_or_404(tag_id)
     return render_template('tag.html', tag=tag)
+
+
+@app.route('/tags/new')
+def show_create_form_tag():
+    """Show a form to create a new tag"""
+
+    posts = Post.query.all()
+    return render_template('new_tag.html', posts=posts)
+
+
+@app.route("/tags/new", methods=["POST"])
+def tags_new():
+    """Creating a new tag"""
+
+    post_ids = [int(num) for num in request.form.getlist("posts")]
+    posts = Post.query.filter(Post.id.in_(post_ids)).all()
+    name = request.form["name"]
+    if not name:
+        flash("Tag name cannot be empty!", "invalid")
+        return redirect("/tags")
+    new_tag = Tag(name=request.form['name'], posts=posts)
+    db.session.add(new_tag)
+    db.session.commit()
+    return redirect("/tags")
+
+
+@app.route('/tags/<int:tag_id>/delete', methods=["POST"])
+def tags_destroy(tag_id):
+    """Handle form submission for deleting an existing tag"""
+
+    tag = Tag.query.get_or_404(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+
+    return redirect("/tags")
+
 
 @app.errorhandler(404)
 def page_not_found(e):
