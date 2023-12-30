@@ -166,7 +166,8 @@ def delete_post(post_id):
 @app.route("/posts/<int:post_id>/edit")
 def show_edit_form_post(post_id):
     post = Post.query.get(post_id)
-    return render_template("edit_post.html", post=post)
+    tags = Tag.query.all()
+    return render_template("edit_post.html", post=post, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit" , methods=['POST'])
@@ -180,6 +181,8 @@ def edit_post(post_id):
     post.title = title
     post.content = content
     post.user_id = post.user.id
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     db.session.add(post)
     db.session.commit()
     return redirect(f"/posts/{post_id}")
